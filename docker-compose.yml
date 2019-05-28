@@ -26,8 +26,6 @@ services:
     restart: unless-stopped
     ports:
       - "9090:9090"
-    networks:
-      - monitor-net
 
   alertmanager:
     image: prom/alertmanager:v0.17.0
@@ -40,8 +38,6 @@ services:
     restart: unless-stopped
     ports:
       - "9093:9093"
-    networks:
-      - monitor-net
 
   nodeexporter:
     image: prom/node-exporter:v0.18.0
@@ -58,8 +54,6 @@ services:
     restart: unless-stopped
     ports:
       - "9100:9100"
-    networks:
-      - monitor-net
 
   grafana:
     image: grafana/grafana:6.2.0
@@ -77,8 +71,6 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
-    networks:
-      - monitor-net
 
   pushgateway:
     image: prom/pushgateway:v0.8.0
@@ -86,27 +78,26 @@ services:
     restart: unless-stopped
     ports:
       - "9091:9091"
-    networks:
-      - monitor-net
 
   rocketchat:
-    image: rocketchat/rocket.chat:latest
+    image: rocketchat/rocket.chat
     command: bash -c 'for i in `seq 1 30`; do node main.js && s=$$? && break || s=$$?; echo "Tried $$i times. Waiting 5 secs..."; sleep 5; done; (exit $$s)'
     restart: unless-stopped
     volumes:
       - ./uploads:/app/uploads
     environment:
-      - PORT=4000
+      - PORT=3000
       - ROOT_URL=http://localhost:4000
       - MONGO_URL=mongodb://mongo:27017/rocketchat
       - MONGO_OPLOG_URL=mongodb://mongo:27017/local
+      - BIND_IP=0.0.0.0
       - MAIL_URL=smtp://smtp.email
 #       - HTTP_PROXY=http://proxy.domain.com
 #       - HTTPS_PROXY=http://proxy.domain.com
     depends_on:
       - mongo
     ports:
-      - 4000:4000
+      - 4000:3000
 
   mongo:
     image: mongo:4.0
@@ -129,7 +120,7 @@ services:
     image: rocketchat/hubot-rocketchat:latest
     restart: unless-stopped
     environment:
-      - ROCKETCHAT_URL=rocketchat:4000
+      - ROCKETCHAT_URL=rocketchat:3000
       - ROCKETCHAT_ROOM=GENERAL
       - ROCKETCHAT_USER=bot
       - ROCKETCHAT_PASSWORD=botpassword
@@ -143,4 +134,3 @@ services:
   # this is used to expose the hubot port for notifications on the host on port 3001, e.g. for hubot-jenkins-notifier
     ports:
       - 3001:8080
-

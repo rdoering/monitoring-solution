@@ -1,11 +1,10 @@
 route:
-    receiver: 'slack'
+  receiver: 'rocketchat'
 
+  
 receivers:
-    - name: 'slack'
-      slack_configs:
-          - send_resolved: true
-            text: "{{ .CommonAnnotations.description }}"
-            username: 'Prometheus'
-            channel: '#<channel-name>'
-            api_url: 'https://hooks.slack.com/services/<webhook-id>'
+- name: "rocketchat"
+  webhook_configs:
+  - url: 'http://rocketchat:3000/hooks/4FZpLyoTHQJM5eiho/ueBAYY2zyWwCfpPGA68G5qBpjjawkKa5GfntNwgaoYT2oQpW'
+    send_resolved: true
+            

@@ -6,7 +6,6 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $adapter = new Prometheus\Storage\InMemory();
 $registry = new CollectorRegistry($adapter);
-$registry->register
 $counter = $registry->registerCounter('test', 'some_counter', 'it increases', ['type', 'color']);
 $count = rand(0, 10);
 echo $count;

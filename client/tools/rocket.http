@@ -1,0 +1,49 @@
+# test rocket chat
+POST http://localhost:4000/hooks/4FZpLyoTHQJM5eiho/ueBAYY2zyWwCfpPGA68G5qBpjjawkKa5GfntNwgaoYT2oQpW
+Content-Type: application/json
+
+{
+  "text": "Example message",
+  "attachments": [
+    {
+      "title": "Rocket.Chat",
+      "title_link": "https://rocket.chat",
+      "text": "Rocket.Chat, the best open source chat",
+      "image_url": "https://rocket.cha t/images/mockup.png",
+      "color": "#764FA5"
+    }
+  ],
+  "status": "firing",
+  "alerts": [
+    {
+      "labels": {
+        "alertname": "high_load",
+        "instance": "node-exporter:9100"
+      },
+      "annotations": {
+        "description": "node-exporter:9100 of job xxxx is under high load.",
+        "severity": "major",
+        "summary": "node-exporter:9100 under high load."
+      }
+    }
+  ]
+}
+
+###
+
+# set an alert
+POST localhost:9093/api/v1/alerts
+Content-Type: application/json
+
+[
+  {
+    "labels": {
+      "alertname": "TestAlert1"
+    }
+  }
+]
+
+###
+
+
+
